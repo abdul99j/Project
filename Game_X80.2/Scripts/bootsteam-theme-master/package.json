@@ -1,0 +1,15 @@
+{
+  "version": "4.1.0",
+  "name": "bootsteam-theme",
+  "private": true,
+  "devDependencies": {
+    "bootstrap": "~4.2.1",
+    "gulp": "~4.0.0",
+    "gulp-sass": "~4.0.2",
+    "gulp-concat": "~2.6.1",
+    "gulp-uglify": "~3.0.1",
+    "gulp-rename": "~1.4.0",
+    "gulp-cssmin": "~0.2.0",
+    "gulp-clean-css": "~4.0.0"
+  }
+}

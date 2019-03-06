@@ -1,0 +1,63 @@
+﻿<head>
+    <title>@ViewBag.Title Sign UP</title>
+    <link rel="stylesheet" href="~/Content/Login.css"  type="text/css"/>
+    
+</head>
+
+<body>
+    <fieldset id="Signup">
+        <legend>SIGN UP</legend>
+        <form name="Singup" method="post">
+
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" required>
+            </div>
+
+            <label id="valid-firstName" class="form-check"></label>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name" required>
+            </div>
+
+            <label id="valid-lastName" class="form-check"></label>
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+            </div>
+
+            <label id="valid-email" class="form-check"></label>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+            </div>
+
+            <label id="valid-password" class="form-check"></label>
+
+            <div class="form-group">
+                <label for="gender">Gender</label><br />
+                <input type="radio" name="gender" />Male<br />
+                <input type="radio" name="gender" />Female<br />
+            </div>
+
+            <div class="form-group">
+                <label for="DateOfBirth">Date OF Birth</label>
+                <input type="date" class="form-control" id="date">
+            </div>
+
+            <label id="valid-login" class="form-check"></label>
+
+            <div class="form-group">
+                <label for="Submit"></label>
+                <input type="submit" class="btn btn-primary" value="Sign In">
+
+            </div>
+
+            <label id="valid-form" class="form-check"></label>
+
+        </form>
+    </fieldset>
+</body>

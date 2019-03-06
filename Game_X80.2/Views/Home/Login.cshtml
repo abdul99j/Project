@@ -1,0 +1,35 @@
+﻿<head>
+    <title>Log IN</title>
+    <link rel="stylesheet" href="~/Content/Login.css" />
+    <script src="~/Scripts/validate.js" ></script>
+</head>
+
+<body>
+    <fieldset>
+        <legend>SIGN IN</legend>
+        <form name="Login" id="login" method="post">
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required
+                      onblur="return validate_Login()">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" required
+                       onchange="return validate_Login()">
+
+            </div>
+
+            <div class="form-group">
+                <label for="Submit"></label>
+                <input type="submit" class="btn btn-primary" value="Sign In">
+
+            </div>
+
+            <label id="valid-login" class="form-check"></label>
+
+        </form>
+    </fieldset>
+</body>
