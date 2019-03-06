@@ -1,9 +1,9 @@
-﻿
+
 function validate_Login() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
-    if (email === '' || password === ' ') {
+    if (email === '' || password === '') {
         document.getElementById("status").innerHTML="Please enter all fields"
         return false;
     }
@@ -14,45 +14,63 @@ function validate_Login() {
     }
 }
 
+function validate_date() {
+    var dateString=document.getElementById("date").value;
+    // Parse the date parts to integers
+    var parts = dateString.split("/");
+    var day = parseInt(parts[1], 10);
+    var month = parseInt(parts[0], 10);
+    var year = parseInt(parts[2], 10);
+
+    // Check the ranges of month and year
+    if (year < 1920 || year > 2000 || month == 0 || month > 12)
+        return false;
+
+    var monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // Adjust for leap years
+    if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+        monthLength[1] = 29;
+
+    // Check the range of the day
+    return day > 0 && day <= monthLength[month - 1];
+}
+
 function validate_Signup() {
     var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
     var firstName = document.getElementById("firstName").value;
     var lastName = document.getElementById("lastName").value;
+    var password = document.getElementById("password").value;
 
     for (var i = 0; i < 9; i++) {
         if (firstName.indexOf(i) != -1) {
-            document.getElementById("valid-firstName").innerHTML = "Please Enter Valid Name";
+            document.getElementById("valid-firstName").innerHTML = "Please Enter a Valid Name";
         }
         if (lastName.indexOf(i) != -1) {
-            document.getElementById("valid-lastName").innerHTML = "Please Enter Valid Name";
+            document.getElementById("valid-lastName").innerHTML = "Please Enter a Valid Name";
         }
     }
-
-
     if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
-        document.getElementById("valid-email").innerHTML = "Please Enter Valid Email Adress";
+        document.getElementById("valid-email").innerHTML = "Please Enter a Valid Email Adress";
         return false;
     }
-    if (password.length < 8) {
-        document.getElementById("valid-password").innerHTML = "Too Short Password";
+    var strongPassword = new RegExp("^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\_^&\*])(?=.{8,})");
+    var IsStrong = strongPassword.test(password);
+
+    if (IsStrong == false) {
+        document.getElementById("valid-password").innerHTML = "Your Password is weak";
         return false;
     }
-    var i, count;
-    for (i = 0; i < password.length; i++) {
-        if (password.charAt(i) >= 65 && password.charAt(i) <= 97) {
-            count++;
-        }
-        else if (password.charAt(i) >= 33 && password.charAt(i) <= 57) {
-            count++;
-        }
-    }
-    if (count >= 2) {
-        return true;
-    }
-    else {
-        document.getElementById("valid-password").innerHTML = "Enter a strong Password";
+    if (!validate_date()) {
         return false;
     }
+        
+
+
+
+
     return true;
+
 }
+
+
