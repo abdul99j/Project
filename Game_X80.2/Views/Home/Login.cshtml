@@ -1,24 +1,23 @@
-﻿<head>
+<head>
     <title>Log IN</title>
     <link rel="stylesheet" href="~/Content/Login.css" />
     <script src="~/Scripts/validate.js" ></script>
 </head>
 
 <body>
-    <fieldset>
+    <fieldset id="login">
         <legend>SIGN IN</legend>
-        <form name="Login" id="login" method="post">
+        <form name="Login"  method="post" id="login-form">
 
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" required
-                      onblur="return validate_Login()">
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required />
+                      
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" required
-                       onchange="return validate_Login()">
+                <input type="password" class="form-control" id="password" placeholder="Password" required/>
 
             </div>
 
@@ -28,7 +27,7 @@
 
             </div>
 
-            <label id="valid-login" class="form-check"></label>
+       
 
         </form>
     </fieldset>
