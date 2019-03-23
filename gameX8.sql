@@ -26,6 +26,7 @@ create table review(
 	reviewID int NOT NULL,
 	gameID int NOT NULL,
 	userName nvarchar(30) NOT NULL,
+	dateGiven date,
 	rating int,
 	reviewDescription int, 
 	check(rating BETWEEN 1 AND 5)
