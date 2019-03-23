@@ -3,19 +3,18 @@ create database GameX8
 create table games(
     gameID int NOT NULL,
 	gameName nvarchar(50) NOT NULL,
-    gameDescription nvarchar(400),
+    gameDescription nvarchar(1000),
 	ReleaseDate date,
 	genre nvarchar(20),
 	developer nvarchar(20)
 );
 
 create table users(
-     userID int NOT NULL,
-	 userName nvarchar(100),
+     userName nvarchar(30) NOT NULL,
 	 Fname nvarchar(30),
 	 Lname nvarchar(30),
 	 userPassword nvarchar(100),
-	 userStatus nvarchar(10) NOT NULL,
+	 userStatus nvarchar(10) NOT NULL DEFAULT 'user',
 	 userEmail nvarchar(100) NOT NULL,
 	 dateOfBirth date,
 	 gender char,
@@ -26,15 +25,16 @@ create table users(
 create table review(
 	reviewID int NOT NULL,
 	gameID int NOT NULL,
-	userID int NOT NULL,
+	userName nvarchar(30) NOT NULL,
 	rating int,
-	reviewDescription int 
+	reviewDescription int, 
+	check(rating BETWEEN 1 AND 5)
 );
 
 create table UserGames(
     orderID int NOT NULL,
 	gameID int NOT NULL,
-	userID int NOT NULL,
+	userName nvarchar(30) NOT NULL,
 	orderDate date,
 );
 
@@ -42,13 +42,12 @@ create table Media(
 	MediaID int NOT NULL,
 	gameID  int NOT NULL,
 	MediaLink nvarchar(100),
-	dateed date
+	dated date
 );
 
 -- TO CHECK FOR CURRENT LOGIN SESSION ONLY
 create Table loginTable(
     loginID int NOT NULL,
-	userName nvarchar(100), --NOTNULL NEEDS TO BE ADDED HERE
+	userName nvarchar(30), --NOTNULL NEEDS TO BE ADDED HERE
 	userPassword nvarchar(100),
 );
--- FURTHER CONSTRAINTS TO BE ADDED
