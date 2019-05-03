@@ -1,18 +1,24 @@
+CREATE VIEW ReviewForGames
+AS
+SELECT R.reviewID,R.rating,R.reviewDescription,R.dateGive,RG.gameID,RG.userName FROM review AS R JOIN reviewGiven AS RG
+ON (R.reviewID=RG.reviewID)
+GO
+
+
+
+
 --SHOW ALL REVIEWS PER GAME
-CREATE PROCEDURE REVIEWS_PER_GAME
+ALTER PROCEDURE REVIEWS_PER_GAME
 
 @gameID int,
 @returnValue int OUTPUT
 AS
 BEGIN
-	IF EXISTS(SELECT* FROM games 
-			  JOIN review ON(games.gameID=review.gameID)
-			  WHERE  games.gameID=@gameID)
+	IF EXISTS(SELECT* FROM ReviewForGames 
+			  WHERE  ReviewForGames.gameID=@gameID)
 	BEGIN
-		      SELECT* FROM games 
-			  JOIN review ON(games.gameID=review.gameID)
-			  WHERE  games.gameID=@gameID
-			  SET @returnValue=0
+		      SELECT* FROM ReviewForGames 
+			  WHERE  ReviewForGames.gameID=@gameID
 	END
 	ELSE 
 		BEGIN
@@ -54,7 +60,8 @@ END
 ALTER VIEW AVG_RATINGS
 AS
 SELECT games.gameID,games.gameName,AVG(CAST(review.rating AS float)) AS AVG_RATING FROM games
-JOIN review ON(review.gameID=games.gameID)
+JOIN reviewgiven ON(reviewGiven.gameID=games.gameID)
+JOIN review ON(reviewGiven.reviewID=review.reviewID)
 GROUP BY games.gameID,games.gameName
 GO
 
@@ -80,28 +87,6 @@ ELSE
 END
 GO
 
-CREATE TRIGGER DUP_EXCEPT --DUPlICATE_EXCEPTION
-ON review
-instead of insert
-AS
-BEGIN
-DECLARE @gameID int,
-		@userName nvarchar(30)
-
-		SELECT @gameID=gameID,@userName=userName FROM  inserted
-
-		IF EXISTS(SELECT gameID,userName FROM review WHERE
-				  gameID=@gameID AND userName=@userName)
-		BEGIN
-			PRINT 'DUPLICATE ENTRIES NOT ALLOWED BY SINGLE USER'
-		END
-
-		ELSE
-			INSERT INTO review
-			SELECT* FROM inserted
-END
-GO
-
 
 CREATE PROCEDURE ADD_REVIEW
 @reviewID int,
@@ -113,12 +98,26 @@ CREATE PROCEDURE ADD_REVIEW
 @returnFlag int OUTPUT
 AS
 BEGIN
-	insert into review values(@reviewID,@gameID,@userName,@rating,@reviewDescription,@dateGiven)
+	
+	IF NOT EXISTS(SELECT* FROM reviewGiven where userName=@userName AND gameID=@gameID AND reviewID=@reviewID)
+	BEGIN
+	insert into reviewGiven Values(@reviewID,@gameID,@userName)
+	insert into review VALUES(@reviewID,@rating,@reviewDescription,@dateGiven)
 	SET @returnFlag=0
+	END
+
+	ELSE
+	BEGIN
+	SET @returnFlag=1
+	END
 END
 GO
 
-CREATE PROCEDURE UPDATE_BY_USERNAME
+
+
+
+
+ALTER PROCEDURE UPDATE_BY_USERNAME
 @userName nvarchar(30),
 @gameID int,
 @rating int,
@@ -126,27 +125,20 @@ CREATE PROCEDURE UPDATE_BY_USERNAME
 @returnValue int OUTPUT
 AS
 BEGIN
-	IF EXISTS(SELECT userName,gameID FROM review WHERE userName=@userName AND gameID=@gameID)
+	DECLARE @reviewID int
+	IF EXISTS(SELECT* FROM reviewGiven where gameID=@gameID AND userName=@userName)
 	BEGIN
-		IF(@Comments!=NULL)
-		BEGIN
-			UPDATE review SET reviewDescription=@Comments,rating=@rating
-			SET @returnValue=0
-		END
-		ELSE IF(@Comments=NULL)
-		BEGIN
-			UPDATE review SET rating=@rating
-			SET @returnValue=0
-		END
+		SELECT @reviewID=review.reviewID FROM reviewGiven 
+		JOIN review ON(review.reviewID=reviewGiven.reviewID)
+		WHERE (gameID=@gameID AND userName=@userName)
+		
+		UPDATE review SET review.reviewDescription=@Comments WHERE (review.reviewID=@reviewID)
 	END
-	ELSE
-	BEGIN
-		SET @returnValue=1
-	END
+
 END
 GO
 
-CREATE PROCEDURE DELETE_REVIEW
+ALTER PROCEDURE DELETE_REVIEW
 @reviewID int,
 @returnValue int OUTPUT
 AS 
@@ -155,6 +147,7 @@ BEGIN
 	
 	BEGIN
 	DELETE FROM review WHERE reviewID=@reviewID
+	DELETE FROM reviewGiven WHERE reviewID=@reviewID
 	SET @returnValue=0
 	END
 
@@ -165,7 +158,7 @@ BEGIN
 END
 GO
 
-Create Procedure ShowReviewGivenByUser
+ALTER Procedure ShowReviewGivenByUser
 @UserName nvarchar(30),
 @out_flag int OUTPUT
 As
@@ -174,28 +167,30 @@ Begin
 	Begin
 	Set @out_flag=1 --User Does not Exist
 	End
-	Else If Not Exists(Select* from review where userName=@UserName)
+	Else If Not Exists(Select* from reviewGiven where userName=@UserName)
 	Begin
 	Set @out_flag=2 --User has Not Given Any Review
 	END
 	Else
 	Begin 
 		Select *
-		from review
-		where review.userName=@UserName
+		from reviewGiven
+		JOIN review ON (review.reviewID=reviewGiven.reviewID)
+		where reviewGiven.userName=@UserName
 		set @out_flag=0
 	End
 End
 GO
 --USER GOT GAME BUT NOT GIVEN REVIEW
-CREATE PROCEDURE REVIEWS_TO_BE_GIVEN
+ALTER PROCEDURE REVIEWS_TO_BE_GIVEN
 @userName nvarchar(30)
 AS
 BEGIN
 	SELECT*
 	FROM users
 	JOIN UserGames ON(users.userName=UserGames.userName)
-	LEFT JOIN review ON (UserGames.gameID=review.gameID)
+	LEFT JOIN reviewGiven ON (UserGames.gameID=reviewGiven.gameID)
+	LEFT JOIN review ON (reviewGiven.reviewID=review.reviewID)
 	WHERE review.rating IS NULL OR review.reviewID IS NULL
 END
 GO
@@ -204,23 +199,21 @@ CREATE PROCEDURE SORT_REVIEW_BY_DATE_DESC
 @gameID int
 AS
 BEGIN
-	SELECT review.rating,review.reviewDescription,review.dateGiven
-	FROM review
-	JOIN users ON (review.userName=users.userName)
-	JOIN games ON (games.gameID=review.gameID)
-	WHERE games.gameID=@gameID
-	ORDER BY review.dateGiven DESC
+	
+	SELECT rating,reviewDescription,dateGive
+	FROM ReviewForGames
+	WHERE ReviewForGames.gameID=@gameID
+	ORDER BY ReviewForGames.dateGive DESC
 END
 GO
 
-CREATE PROCEDURE SORT_REVIEW_BY_DATE_ASC
+ALTER PROCEDURE SORT_REVIEW_BY_DATE_ASC
 @gameID int
 AS
 BEGIN
-	SELECT review.rating,review.reviewDescription,review.dateGiven
-	FROM review
-	JOIN users ON (review.userName=users.userName)
-	JOIN games ON (games.gameID=review.gameID)
-	WHERE games.gameID=@gameID
-	ORDER BY review.dateGiven ASC
+	
+	SELECT rating,reviewDescription,dateGive
+	FROM ReviewForGames
+	WHERE ReviewForGames.gameID=@gameID
+	ORDER BY ReviewForGames.dateGive ASC
 END
