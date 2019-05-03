@@ -49,17 +49,16 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE INSERT_MEDIA
+ALTER PROCEDURE INSERT_MEDIA
 @MediaID int,
 @gameID  int,
 @MediaLink nvarchar(100),
-@dated date,
 @returnValue int OUTPUT
 AS
 BEGIN
 	IF NOT EXISTS(SELECT *FROM Media WHERE MediaID=@MediaID)
 	BEGIN
-		insert into Media values(@MediaID,@gameID,@MediaLink,@dated)
+		insert into Media values(@MediaID,@gameID,@MediaLink)
 		SET @returnValue=0
 	END
 
@@ -118,4 +117,12 @@ CREATE PROCEDURE DELETE_ALL_MEDIA
 AS
 BEGIN
 	DELETE FROM Media
+END
+GO
+
+CREATE PROCEDURE ShowMediaForGame
+@gameID int
+AS
+BEGIN
+	SELECT *FROM MEDIA_RELATIVE_TO_GAME WHERE gameID=@gameID
 END

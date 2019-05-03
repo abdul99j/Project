@@ -1,18 +1,16 @@
 SELECT *FROM UserGames
 GO
 
-CREATE PROCEDURE ADD_NEW_ORDER
-@orderID int,
+ALTER PROCEDURE ADD_NEW_ORDER
 @gameID int,
 @userName nvarchar(30),
-@orderDate date,
 @returnValue int
 AS
 BEGIN
 	IF NOT EXISTS(SELECT *FROM UserGames 
-				 WHERE orderID=@orderID )
+				 WHERE gameID=@gameID AND userName=@userName)
 	  BEGIN
-		insert into UserGames values(@orderID,@gameID,@userName,@orderDate)
+		insert into UserGames values(@gameID,@userName,GETDATE())
 		SET @returnValue=0
 	  END
 	ELSE
