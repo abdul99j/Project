@@ -38,7 +38,7 @@ create table review(
 	reviewDescription int,
 	dateGive date, 
 	check(rating BETWEEN 1 AND 5)
-);
+)
 
 
 create table UserGames(
