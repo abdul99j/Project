@@ -1,5 +1,8 @@
 create database GameX8
 
+use GameX8
+select *from users
+
 create table games(
     gameID int NOT NULL,
 	gameName nvarchar(50) NOT NULL,
@@ -22,55 +25,64 @@ create table users(
 	 check(gender='M' OR gender='F')
 );
 
-create table review(
+create table reviewGiven(
 	reviewID int NOT NULL,
 	gameID int NOT NULL,
 	userName nvarchar(30) NOT NULL,
+);
+
+
+create table review(
+	reviewID int NOT NULL,
 	rating int,
 	reviewDescription int,
 	dateGive date, 
 	check(rating BETWEEN 1 AND 5)
 );
 
+
 create table UserGames(
-    orderID int NOT NULL,
-	gameID int NOT NULL,
+    gameID int NOT NULL,
 	userName nvarchar(30) NOT NULL,
 	orderDate date,
 );
 
+
+
 create table Media(
 	MediaID int NOT NULL,
-	gameID  int NOT NULL,
+	gameID int NOT NULL,
 	MediaLink nvarchar(100),
-	dated date
 );
 
+
 -- TO CHECK FOR CURRENT LOGIN SESSION ONLY
-create Table loginTable(
-    loginID int NOT NULL,
-	userName nvarchar(30), --NOTNULL NEEDS TO BE ADDED HERE
-	userPassword nvarchar(100),
-);
 
 --PRIMARY KEYS FOR ALL TABLES
 
 alter table games add constraint PK_GAME primary key(gameID)
 alter table users add constraint PK_USERS primary key (userName)
-alter table UserGames add constraint PK_USERSGAMES primary key (orderID)
+alter table UserGames add constraint PK_USERSGAMES primary key (gameID,userName)
 
-alter table Media add constraint PK_MEDIA primary key (MediaID)
-alter table loginTable add constraint PK_LOGINTABLE primary key (loginID)
+
+alter table Media add constraint PK_MEDIA primary key (MediaID,gameID)
 alter table review add constraint PK_REVIEW primary key (reviewID)
-
+alter table reviewGiven add constraint PK_REVIEW_GIVEN primary key(reviewID,userName,gameID)
+--alter table MediaFor add constraint PK_MEDIA_FOR primary key(mediaID,gameID)
 --FORIEGN KEYS FOR ALL TABLES
-ALTER TABLE review
-ADD CONSTRAINT FK_REVIEWS
-FOREIGN KEY (userName) REFERENCES users(userName);
 
-ALTER TABLE review
+ALTER TABLE reviewGiven
+ADD CONSTRAINT FK_REVIEWS
+FOREIGN KEY(reviewID) REFERENCES review(reviewID)
+
+ALTER TABLE reviewGiven
 ADD CONSTRAINT FK_REVIEWS_ONE
 FOREIGN KEY (gameID) REFERENCES games(gameID);
+
+ALTER TABLE reviewGiven
+ADD CONSTRAINT FK_REVIEWS_TWO
+FOREIGN KEY (userName) REFERENCES users(userName);
+
 
 ALTER TABLE UserGames
 ADD CONSTRAINT FK_USER_GAMES
@@ -80,12 +92,13 @@ ALTER TABLE UserGames
 ADD CONSTRAINT FK_UG_ONE
 FOREIGN KEY (userName) REFERENCES users(userName);
 
-ALTER TABLE loginTable
-ADD CONSTRAINT FK_LOGIN
-FOREIGN KEY (userName) REFERENCES users(userName);
 
-ALTER TABLE Media
-ADD CONSTRAINT FK_MEDIA
+ALTER TABLE MediaFor
+ADD CONSTRAINT FK_MEDIA_FOR
 FOREIGN KEY (gameID) REFERENCES games(gameID);
+
+ALTER TABLE MediaFor
+ADD CONSTRAINT FK_MEDIA_FOR_ONE
+FOREIGN KEY (mediaID) REFERENCES Media(mediaID);
 
 -- END OF FOREIGN_KEYS 
