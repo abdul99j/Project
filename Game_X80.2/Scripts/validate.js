@@ -1,6 +1,4 @@
-
-
-function validate_Login() {
+﻿function validate_Login() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
@@ -77,5 +75,3 @@ function validate_Signup() {
     return true;
 
 }
-
-

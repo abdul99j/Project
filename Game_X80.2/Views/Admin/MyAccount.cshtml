@@ -1,0 +1,77 @@
+﻿@using GameX8_0._4.Models
+
+@{
+    ViewBag.Title = "MyAccount";
+}
+
+<body>
+        @{ 
+            Users currentUser = new Users();
+            currentUser = ViewBag.currentUser;
+        }
+    <fieldset>
+        <legend>ACCOUNT INFO</legend>
+        <h6>userName:</h6>
+        <span class="text-primary">
+            @currentUser.userName
+        </span>
+
+        <h6 >userEmail:</h6>
+        <span class="text-primary">
+            @currentUser.userEmail
+        </span>
+
+        <h6>First Name:</h6>
+        <span class="text-primary">
+            @currentUser.Fname
+        </span>
+        <h6>Last Name:</h6>
+        <span class="text-primary">
+            @currentUser.Lname
+        </span>
+
+        <h6>gender:</h6>
+        <span class="text-primary">
+            @currentUser.gender
+        </span>
+
+        <h6>Date Of Birth:</h6>
+        <span class="text-primary">
+            @currentUser.dateOfBirth
+        </span>
+    </fieldset>
+
+    <fieldset>
+        <legend>MY GAMES</legend>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">gameID</th>
+                    <th scope="col">game Name</th>
+                    <th scope="col">Releease Date</th>
+                    <th scope="col">genre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                    if(ViewBag.useGames!=null)
+                    { 
+
+                    foreach (Game g in ViewBag.userGames)
+                    {
+                    <tr class="table-dark">
+                        <th scope="row">@g.gameID</th>
+                        <td>@g.gameName</td>
+                        <td>@g.releaseDate</td>
+                        <td>@g.genre</td>
+                    </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </fieldset>
+
+
+</body>
+

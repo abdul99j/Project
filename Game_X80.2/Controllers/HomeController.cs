@@ -1,75 +1,79 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Game_X80._2.Models;
-namespace Game_X80._2.Controllers
+using GameX8_0._4.Models;
+
+namespace GameX8_0._4.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
-        public ActionResult Index()
+        public ActionResult Index(string userName)
         {
             return View();
         }
-        public ActionResult Login()
+
+        
+
+        public ActionResult LoginProc(string userName,string password)
         {
+            int result = CRUD.Login(userName, password);
+            if(result==0)
+            {
+                Session["userName"] = userName;
+                return RedirectToAction("Index", new { userName });
+            }
             return View();
         }
+
         public ActionResult Signup()
         {
             return View();
         }
-        public ActionResult authenticate(String userName, String password)
-        {
-            int result = CRUD.Login(userName, password);
 
-            if (result == -1)
+        public ActionResult SignupProc(string userName,string email,string password,string firstName,
+            string lastName,string dateOfBirth,string gender)
+        {
+            int result = CRUD.Signup(userName, firstName, lastName, email,gender,password, dateOfBirth);
+            if (result == 0)
             {
-                return View("index");
+                string success = "REGISTRATION SUCCESS";
+                return RedirectToAction("Login",(object)success);
             }
+
             else if (result == 1)
             {
-
-                return View("Signup");
+                string errorMessage = "INVALID VALUES";
+                return RedirectToAction("Signup",(object)errorMessage);
             }
-
-            return RedirectToAction("Login");
-
-        }
-        public ActionResult Authenticate11(string Fname, string lname, string userName, string userEmail, string userPassword, string gender, string dateOfBirth)
-        {
-            int result = CRUD.SignUp(Fname, lname, userName, userEmail, userPassword, gender, dateOfBirth);
-
-            if (result == 1)
-            {
-                Session["userName"] = userName;
-                Response.Write(Session["userName"]);
-                return RedirectToAction("getAllUsers");
-                
-            }
-                
             else if (result == 2)
             {
-
-                return RedirectToAction("Index");
+                string errorMessage = "userName already exitsts";
+                return RedirectToAction("Signup",(object)errorMessage);
             }
-            else if (result == -1)
+            else
             {
-                return RedirectToAction("Index");
+                string errorMessage = "Some error occured at server ERROR NO 4315";
+                return View("Signup", (object)errorMessage);
             }
-            return RedirectToAction("Signup");
         }
-        public ActionResult getAllUsers()
+        public ActionResult Game(string gameName)
         {
-            List <User> l1= CRUD.getAllUsers();
-            return View(l1);
+            int gameId=CRUD.GetGameID(gameName);
+            Game game = new Game();
+            game = CRUD.GetGame(gameId);
+            game.mediaLinks = CRUD.getGameMedia(gameId);
+            game.reviews = CRUD.getGameReviews(gameId);
+            return View("game",game);
         }
-        public ActionResult Admin()
+        
+        public ActionResult Games()
         {
-            return View();
+            List<Game> games = new List<Game>();
+            games = CRUD.GetAllGames();
+            return View("Games", games);
         }
+       
     }
-    
 }

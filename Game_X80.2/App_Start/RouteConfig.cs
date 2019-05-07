@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Game_X80._2
+namespace GameX8_0._4
 {
     public class RouteConfig
     {

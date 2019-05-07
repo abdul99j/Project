@@ -1,0 +1,56 @@
+﻿@using GameX8_0._4.Models
+@model List<Game>
+@{
+    ViewBag.Title = "ViewGames";
+}
+
+<head>
+    <title>All Games</title>
+</head>
+
+<body>
+    <form action="../../Admin/SearchGame">
+        
+        <label for="gameName">ENTER GAME NAME HERE</label>
+        <input type="text" name="gameName" placeholder="Search Here" />
+        &nbsp;&nbsp;&nbsp;
+        
+        <label for="submit"></label>
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </form>
+
+    <form action="../../Admin/removeGame">
+        <label for="gameName">ENTER GAME NAME HERE</label>
+        <input type="text" name="removeGame" placeholder=""/>
+
+        &nbsp;&nbsp;&nbsp;
+        <label for="submit"></label>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    
+    </form>
+
+    <br />
+    <br />
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Game ID</th>
+                <th scope="col">Game Name</th>
+                <th scope="col">Game Developer</th>
+                <th scope="col">Release Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Game g in Model)
+            {
+                <tr class="table-dark">
+                    <th scope="row">@g.gameID</th>
+                    <td><a href="/Home/Game"></a>@g.gameName</td>
+                    <td>@g.Developer</td>
+                    <td>@g.releaseDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>

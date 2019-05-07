@@ -3,36 +3,38 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title GameX8</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Scripts/bootsteam-theme-master/dist/bootsteam.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Layout.css" rel="stylesheet" type="text/css" />
-    <script src="~/Scripts/modernizr-2.6.2.js"></script>
-
+    <title>@ViewBag.Title - My ASP.NET Application</title>
     
 
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="/Home/Index">GameX8</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" style="">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarColor02">
+        <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/Home/Index.cshtml">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/Home/Index">Home <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Home/Games">Games</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Admin/MyAccount">My Account</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Authenticate/Login">Log In</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Home/Signup">Sign up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Home/Login">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="/Authenticate/Signup">Sign Up</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -41,13 +43,16 @@
             </form>
         </div>
     </nav>
-    @RenderBody()
-    
-    <div class="footer-align">
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
         <footer>
-
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 </body>
 </html>
