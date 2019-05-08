@@ -117,5 +117,62 @@ namespace GameX8_0._4.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+        public ActionResult AddGame()
+        {
+            return View();
+        }
+        public ActionResult AddGameProc(string gameName, string gameDesc, string releaseDate, string developer,
+           string genre)
+        {
+            CRUD.InsertNewGame(gameName, gameDesc, releaseDate, developer, genre);
+            return View("ViewGames");
+        }
+        public ActionResult AddMedia()
+        {
+            return View();
+        }
+       public ActionResult DeleteUser(string userName)
+        {
+            if (Session["userName"] != null && Session["admin"] != null)
+            {
+                CRUD.removeUser(userName);
+            }
+            return RedirectToAction("ViewUser", "Admin");
+        }
+        public ActionResult DeleteAllUsers()
+        {
+            if (Session["userName"] != null && Session["admin"] != null)
+            {
+                string user = Session["userName"].ToString();
+                CRUD.DeleteAllUsers(user);
+            }
+            return RedirectToAction("ViewUser", "Admin");
+        }
+
+        public ActionResult UserInfo(string userName)
+        {
+            if(Session["userName"]!=null&&Session["admin"]!=null)
+            {
+                Users user = new Users();
+                user = CRUD.SeachUser(userName);
+                ViewBag.currentUser = user;
+                ViewBag.UserGames = new List<Game>();
+                ViewBag.UserGames = CRUD.GetUserGames(userName);
+                return View("UserInfo");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+        }
+        public ActionResult DeleteAllGames()
+        {
+            if (Session["userName"] != null && Session["admin"] != null)
+            {
+                CRUD.DeleteAllGames();
+            }
+            return RedirectToAction("ViewGames", "Admin");
+        }
     }
 }

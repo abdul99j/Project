@@ -1,62 +1,69 @@
 ﻿<head>
+    
     <title>@ViewBag.Title Sign UP</title>
     <link rel="stylesheet" href="~/Content/Login.css"  type="text/css"/>
-    
+    <script src="~/Scripts/validate.js"></script>
+
 </head>
 
 <body>
     <fieldset id="Signup">
         <legend>SIGN UP</legend>
-        <form name="Singup" method="post">
+        <form name="Singup" method="post" onsubmit="return validate_Signup()" 
+              id="Singup-form" action="~/Home/signnup">
+
+            <div class="form-group">
+                <label for="userName">User Name</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter User Name" required />
+            </div>
 
             <div class="form-group">
                 <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" required>
+                <input type="text" class="form-control" id="firstName" name="Fname" placeholder="Enter First Name" required />
             </div>
 
             <label id="valid-firstName" class="form-check"></label>
 
             <div class="form-group">
                 <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name" required>
+                <input type="text" class="form-control" name="Lname" id="lastName" placeholder="Enter Last Name" required />
             </div>
 
-            <label id="valid-lastName" class="form-check"></label>
+            <label id="valid-lastName"></label>
 
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required />
             </div>
 
-            <label id="valid-email" class="form-check"></label>
+            <label id="valid-email"></label>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
             </div>
 
-            <label id="valid-password" class="form-check"></label>
+            <label id="valid-password"></label>
 
             <div class="form-group">
                 <label for="gender">Gender</label><br />
-                <input type="radio" name="gender" />Male<br />
+                <input type="radio" name="gender" checked />Male<br />
                 <input type="radio" name="gender" />Female<br />
             </div>
 
             <div class="form-group">
                 <label for="DateOfBirth">Date OF Birth</label>
-                <input type="date" class="form-control" id="date">
+                <input type="date" name="dob" class="form-control" id="date">
             </div>
 
-            <label id="valid-login" class="form-check"></label>
+            <label id="valid-date"></label>
 
             <div class="form-group">
                 <label for="Submit"></label>
-                <input type="submit" class="btn btn-primary" value="Sign In">
-
+                <input type="submit" class="btn btn-primary" value="Register">
             </div>
 
-            <label id="valid-form" class="form-check"></label>
+
 
         </form>
     </fieldset>

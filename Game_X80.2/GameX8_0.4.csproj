@@ -192,7 +192,7 @@
     <Content Include="Views\Admin\AddGame.cshtml" />
     <Content Include="Views\Admin\ViewGames.cshtml" />
     <Content Include="Views\Authenticate\Login.cshtml" />
-    <Content Include="Views\Admin\User.cshtml" />
+    <Content Include="Views\Admin\UserInfo.cshtml" />
     <Content Include="Views\Home\Game.cshtml" />
     <Content Include="Views\Home\Games.cshtml" />
   </ItemGroup>

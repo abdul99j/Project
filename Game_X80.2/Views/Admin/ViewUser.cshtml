@@ -16,6 +16,14 @@
 
     </form>
 
+    <a class="btn btn-danger" href=@Url.Action("DeleteAllUsers")>Delete All Users</a>
+
+    <form action="../../Admin/DeleteUser" style="display:inline-block">
+        <label for="Delete USer"></label>
+        <input type="text" name="userName" placeholder="Delete User" />
+    </form>
+
+
     <table class="table table-hover">
         <thead>
             <tr>
@@ -29,7 +37,7 @@
             {
                 <tr class="table-dark">
 
-                    <th scope="row"><a href="/Admin/user">@u.userName</a></th>
+                    <th scope="row"><a href=@Url.Action("UserInfo",new {userName=@u.userName})>@u.userName</a></th>
                     <td>@u.userEmail</td>
                     <td>@u.userStatus</td>
 

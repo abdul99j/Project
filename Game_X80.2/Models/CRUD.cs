@@ -11,7 +11,7 @@ namespace GameX8_0._4.Models
 {
     public class CRUD
     {
-        public static string connectionString = "data source=desktop-12i97al\\sqlexpress; Initial Catalog=GameX8;Integrated Security=true";
+        public static string connectionString = "data source=DESKTOP-12I97AL\\SQLEXPRESS; Initial Catalog=GameX8;Integrated Security=true";
 
         public static string Session { get; private set; }
 
@@ -247,8 +247,9 @@ namespace GameX8_0._4.Models
 
             try
             {
-                cmd = new SqlCommand("DELETE  FROM users WHERE userName!=currentLogin", con);
+                cmd = new SqlCommand("DELETE  FROM users WHERE userName!=@currentLogin", con);
                 cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Parameters.AddWithValue("@currentLogin", CurrentLogin);
                     
             }
             
@@ -521,21 +522,21 @@ namespace GameX8_0._4.Models
 
         }
 
-        public static int AddRating(int rating,string description,string gameName)
+        public static int AddRating(int rating,string description,int gameID,string user)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd;
             int result = 0;
-
+            
             try
             {
                 cmd = new SqlCommand("ADD_REVIEW", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@rating", SqlDbType.Int).Value = rating;
-                cmd.Parameters.Add("@reviewDesc", SqlDbType.NVarChar, 50).Value = password;
-                cmd.Parameters.Add("@gameID",sqlDbType.NvarChar)
-                cmd.Parameters.Add("userName")
+                cmd.Parameters.Add("@reviewDesc", SqlDbType.NVarChar, 400).Value =description ;
+                cmd.Parameters.Add("@gameID", SqlDbType.Int).Value = gameID;
+                cmd.Parameters.Add("@userName", SqlDbType.NVarChar, 30).Value=user;
 
                 cmd.Parameters.Add("@Out_Flag", SqlDbType.Int).Direction = ParameterDirection.Output;
 

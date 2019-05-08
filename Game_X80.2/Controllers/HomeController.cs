@@ -60,7 +60,7 @@ namespace GameX8_0._4.Controllers
         {
             if (gameName != null)
             {
-                ViewData["gameName"] = gameName;
+                Session["gameName"]= gameName;
                 int gameId=CRUD.GetGameID(gameName);
                 Game game = new Game();
                 game = CRUD.GetGame(gameId);
@@ -73,6 +73,7 @@ namespace GameX8_0._4.Controllers
                 return RedirectToAction("Games", "Admin");
             }
         }
+
         public ActionResult AddGame(string gameName)
         {
             if(Session["userName"]!=null)
@@ -92,13 +93,28 @@ namespace GameX8_0._4.Controllers
                 return  RedirectToAction("Login", "Authenticate");
             }
         }
+
         public ActionResult AddReview(int rating,string description)
         {
-            if (ViewData["gameName"] != null) { 
+            if (Session["gameName"] != null&&Session["userName"]!=null) { 
             int gameID = CRUD.GetGameID(ViewData["gameName"].ToString());
-            CRUD.AddRating()
+                int result=CRUD.AddRating(rating, description, gameID,Session["userName"].ToString());
+                if(result==0)
+                {
+                    return RedirectToAction("Game", new { gameName = ViewData["gameName"].ToString() });
+                }
+                else
+                {
+                    return RedirectToAction("Games", "Home");
+                }
             }
+            else
+            {
+                return RedirectToAction("Games", "Home");
+            }
+
         }
+
         public ActionResult Games()
         {
             List<Game> games = new List<Game>();
