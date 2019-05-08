@@ -14,8 +14,6 @@ namespace GameX8_0._4.Controllers
             return View();
         }
 
-        
-
         public ActionResult LoginProc(string userName,string password)
         {
             int result = CRUD.Login(userName, password);
@@ -60,20 +58,55 @@ namespace GameX8_0._4.Controllers
         }
         public ActionResult Game(string gameName)
         {
-            int gameId=CRUD.GetGameID(gameName);
-            Game game = new Game();
-            game = CRUD.GetGame(gameId);
-            game.mediaLinks = CRUD.getGameMedia(gameId);
-            game.reviews = CRUD.getGameReviews(gameId);
-            return View("game",game);
+            if (gameName != null)
+            {
+                ViewData["gameName"] = gameName;
+                int gameId=CRUD.GetGameID(gameName);
+                Game game = new Game();
+                game = CRUD.GetGame(gameId);
+                game.mediaLinks = CRUD.getGameMedia(gameId);
+                game.reviews = CRUD.getGameReviews(gameId);
+                return View("game",game);
+            }
+            else
+            {
+                return RedirectToAction("Games", "Admin");
+            }
         }
-        
+        public ActionResult AddGame(string gameName)
+        {
+            if(Session["userName"]!=null)
+            {
+                int result = CRUD.AddToUserGames(Session["userName"].ToString(), gameName);
+                if(result==-1||result==1)
+                {
+                    string errorMsg = "ALREADY ADDED";
+                    ViewData["errorMsg"] = errorMsg;
+                    return View("Index");
+                }
+                ViewData["Success"] = "ADDED SUCESSFULLY";
+                return View("Index",(object)ViewData["Success"].ToString());
+            }
+            else
+            {
+                return  RedirectToAction("Login", "Authenticate");
+            }
+        }
+        public ActionResult AddReview(int rating,string description)
+        {
+            if (ViewData["gameName"] != null) { 
+            int gameID = CRUD.GetGameID(ViewData["gameName"].ToString());
+            CRUD.AddRating()
+            }
+        }
         public ActionResult Games()
         {
             List<Game> games = new List<Game>();
             games = CRUD.GetAllGames();
             return View("Games", games);
         }
+
+        
        
     }
 }

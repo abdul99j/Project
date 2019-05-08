@@ -53,8 +53,8 @@
                 </tr>
             </thead>
             <tbody>
-                @{ 
-                    if(ViewBag.useGames!=null)
+                 
+                   @if(ViewBag.userGames!=null)
                     { 
 
                     foreach (Game g in ViewBag.userGames)
@@ -67,7 +67,7 @@
                     </tr>
                         }
                     }
-                }
+                
             </tbody>
         </table>
     </fieldset>

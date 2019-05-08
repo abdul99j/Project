@@ -4,10 +4,81 @@
     ViewBag.Title = "Game";
 }
 <head>
-    <link href="~/Content/game.css" type="text/css"/>
-</head>
-
-<body>
     
+</head>
+<body>
+    <br />
+    <h2>@Model.gameName</h2>
+    @if (Model.mediaLinks.Any())
+    {
+        int count = Model.mediaLinks.Count();
+        if (count <= 3)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                <img src="@Url.Content(@Model.mediaLinks[i])" class="img-responsive" style="margin-right:10px;" />
 
+            }
+        }
+        else
+        {
+            for (int i = 0; i < count; i++)
+            {
+                <img src="@Url.Content(@Model.mediaLinks[i])" class="img-responsive" style="margin-right:10px;" />
+
+            }
+        }
+    }
+
+    <br /><br />
+
+    <a class="btn btn-dark" href="@Url.Action("AddGame","Home")">Add To Games</a>
+    <br /><br />
+    <div id="game-desc">
+        <fieldset>
+            <legend>Game Description</legend>
+            <p class="text-dark">
+                @Model.gameDescription
+            </p>
+        </fieldset>
+    </div>
+
+    <br />
+    <br />
+
+    <h3>Rating</h3>
+    @if (Session["userName"] != null) {
+    <form action="/Home/AddReview">
+        <fieldset class="rating">
+
+            <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+            <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+            <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3" title="Meh - 3 stars"></label>
+            <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+            <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1" title="Sucks big time - 1 star"></label>
+            <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+        </fieldset>
+        <br />
+        <br />
+        <fieldset>
+            <input type="text" class="form-text" name="description" style="height:10rem; width:80rem;" />
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </fieldset>
+        
+    </form>
+    }
+    <br /><br />
+    @if (Model.reviews!=null)
+    {
+        foreach (Review review in Model.reviews)
+        {
+            <div class="card border-dark mb-3" style="width: 40rem; margin-left:-10px;">
+              <div class="card-header"><p>(Rating=@review.rating)</p>&nbsp;&nbsp;<p>@review.dateGiven</p></div>
+              <div class="card-body">
+                  <h4 class="card-title">@review.reviewDesc</h4>
+              </div>
+            </div>
+            <br />
+        }
+    }
 </body>

@@ -4,29 +4,43 @@
     ViewBag.Title = "Games";
 }
 <head>
-    <link href="~/Content/games.css" type="text/css" />
-    
+
 </head>
 <h2>Games</h2>
 <body>
-
+    @{
+        var d1 = "<div class=\"row\">";
+        var d2 = "</div>";
+        var x = 0;
+    }
     @foreach (Game g in Model)
     {
         if (g.mediaLinks.Any())
         {
-            <a href="@Url.Action("Game","Home",new {gameName=@g.gameName})">
-                <div class="card text-white bg-primary mb-3" id="games" style="max-width: 20rem;">
-                    <div class="card-header">@g.gameName</div>
-
+            if (x % 4 == 0)
+            {
+                @Html.Raw(d1);
+            }
+            <div class="col-3">
+                <div class="card border-light mb-3" style="height:16rem; width:14rem; margin-top:30px;">
+                    <div class="card-header">
+                        <img src="@Url.Content(@g.mediaLinks.First())" class="card-img-top" />
+                    </div>
                     <div class="card-body">
-                        <h4 class="card-title"><img src="@Url.Content(@g.mediaLinks.First())" class="img-thumbnail" /></h4>
+                        <h4 class="card-title">@g.gameName</h4>
+                        <a class="btn btn-primary" href="@Url.Action("Game","Home",new {gameName=@g.gameName})">View</a>
+                        <a class="btn btn-dark" href="@Url.Action("AddGame","Home",new {gameName=@g.gameName})">Add To Games</a>
                     </div>
                 </div>
-            </a>
-            
-            
+            </div>
+            if (x % 4 == 3)
+            {
+                @Html.Raw(d2);
+            }
+            x++;
         }
     }
+
 
 
 

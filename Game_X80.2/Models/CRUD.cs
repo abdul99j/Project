@@ -13,6 +13,8 @@ namespace GameX8_0._4.Models
     {
         public static string connectionString = "data source=desktop-12i97al\\sqlexpress; Initial Catalog=GameX8;Integrated Security=true";
 
+        public static string Session { get; private set; }
+
         public static List<Users> GetAllUsers()
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -210,8 +212,58 @@ namespace GameX8_0._4.Models
             return result;
         }
 
-        
-    
+        public static int DeleteAllGames()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd;
+            int result = 0;
+
+            try
+            {
+                cmd = new SqlCommand("DELETE FROM Games", con);
+                cmd.CommandType = System.Data.CommandType.Text;
+                return result;
+            }
+
+            catch (SqlException ex)
+            {
+                Console.WriteLine("SQL Error" + ex.Message.ToString());
+                result = -1; //-1 will be interpreted as "error while connecting with the database."
+                return result;
+            }
+            finally
+            {
+                con.Close();
+            }
+            
+        }
+        public static int DeleteAllUsers(string CurrentLogin)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd;
+            int result = 0;
+
+            try
+            {
+                cmd = new SqlCommand("DELETE  FROM users WHERE userName!=currentLogin", con);
+                cmd.CommandType = System.Data.CommandType.Text;
+                    
+            }
+            
+            catch (SqlException ex)
+            {
+                Console.WriteLine("SQL Error" + ex.Message.ToString());
+                result = -1; //-1 will be interpreted as "error while connecting with the database."
+                return result;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return result;
+        }
 
         public static int GetGameID(string gameName)
         {
@@ -332,7 +384,7 @@ namespace GameX8_0._4.Models
 
             try
             {
-                cmd = new SqlCommand("SELECT rating,reviewDescription,dateGive FROM review WHERE gameId=@gameID", con);
+                cmd = new SqlCommand("SELECT rating,reviewDescription,dateGive FROM ReviewForGames  WHERE gameId=@gameID", con);
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Parameters.AddWithValue("@gameID", gameID);
 
@@ -346,7 +398,6 @@ namespace GameX8_0._4.Models
                     review.rating = Convert.ToInt32(rdr_review["rating"]);
                     review.reviewDesc = rdr_review["reviewDescription"].ToString();
                     review.dateGiven = rdr_review["dateGive"].ToString();
-
                     reviews.Add(review);
 
                 }
@@ -399,7 +450,7 @@ namespace GameX8_0._4.Models
 
         
 
-        public static List<Game> getUserGames(string userName)
+        public static List<Game> GetUserGames(string userName)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -408,11 +459,10 @@ namespace GameX8_0._4.Models
 
             try
             {
-                cmd = new SqlCommand("SELECT gameId FROM USER_GAMES WHERE userName=@userName", con);
+                cmd = new SqlCommand("SELECT gameId FROM UserGames WHERE userName=@userName", con);
                 cmd.Parameters.AddWithValue("@userName", userName);
                 cmd.CommandType = System.Data.CommandType.Text;
-                SqlDataReader rdr = cmd.ExecuteReader();
-
+                
                 List<Game> games = new List<Game>();
                 SqlDataReader rdr_games = cmd.ExecuteReader();
 
@@ -435,7 +485,7 @@ namespace GameX8_0._4.Models
                 con.Close();
             }
         }
-        public static int insertNewGame(string gameName, string gameDesc, string releaseDate, string developer,
+        public static int InsertNewGame(string gameName, string gameDesc, string releaseDate, string developer,
             string genre)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -445,20 +495,53 @@ namespace GameX8_0._4.Models
 
             try
             {
-                cmd = new SqlCommand("ADD_NEW_USER", con);
+                cmd = new SqlCommand("INSERT_NEW_GAME", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.Add("@gameName", SqlDbType.NVarChar, 50).Value = gameName;
                 cmd.Parameters.Add("@gameDescription", SqlDbType.NVarChar, 1000).Value = gameDesc;
                 cmd.Parameters.Add("@releaseDate", SqlDbType.NVarChar, 1000).Value = releaseDate;
                 cmd.Parameters.Add("@developer", SqlDbType.NVarChar, 1000).Value = developer;
                 cmd.Parameters.Add("@genre", SqlDbType.NVarChar, 1000).Value = genre;
-
                 cmd.Parameters.Add("@returnValue", SqlDbType.Int).Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
                 result = Convert.ToInt32(cmd.Parameters["@returnValue"].Value);
             }
 
+            catch (SqlException ex)
+            {
+                Console.WriteLine("SQL Error" + ex.Message.ToString());
+                result = -1; //-1 will be interpreted as "error while connecting with the database."
+            }
+            finally
+            {
+                con.Close();
+            }
+            return result;
+
+        }
+
+        public static int AddRating(int rating,string description,string gameName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd;
+            int result = 0;
+
+            try
+            {
+                cmd = new SqlCommand("ADD_REVIEW", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@rating", SqlDbType.Int).Value = rating;
+                cmd.Parameters.Add("@reviewDesc", SqlDbType.NVarChar, 50).Value = password;
+                cmd.Parameters.Add("@gameID",sqlDbType.NvarChar)
+                cmd.Parameters.Add("userName")
+
+                cmd.Parameters.Add("@Out_Flag", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                result = Convert.ToInt32(cmd.Parameters["@Out_Flag"].Value);
+            }
             catch (SqlException ex)
             {
                 Console.WriteLine("SQL Error" + ex.Message.ToString());
@@ -517,6 +600,44 @@ namespace GameX8_0._4.Models
             }
         }
 
+        public static int AddToUserGames(string userName, string gameName)
+        {
+            int gameID = GetGameID(gameName);
+            int result;
+            if (gameID != -1)
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd;
+
+                try
+                {
+                    cmd = new SqlCommand("InsertUserGames", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@UserName", SqlDbType.NVarChar, 50).Value = userName;
+                    cmd.Parameters.Add("@gameID", SqlDbType.NVarChar, 50).Value = gameID;
+                    cmd.Parameters.Add("@orderDate", SqlDbType.DateTime).Value = DateTime.Now;
+                    cmd.Parameters.Add("@returnValue", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    result = Convert.ToInt32(cmd.Parameters["@returnValue"].Value);
+                    return result;
+                }
+                catch (SqlException exp)
+                {
+                    Console.WriteLine("SQL Error" + exp.Message.ToString());
+                    return -1;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            else
+            {
+                return -1;
+            }
+        }
         public static int removeUser(string userName)
         {
             SqlConnection con = new SqlConnection(connectionString);

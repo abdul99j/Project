@@ -53,7 +53,7 @@ namespace GameX8_0._4.Controllers
                 ViewBag.currentUser = new Users();
                 ViewBag.currentUser = CRUD.SeachUser(userName);
                 ViewBag.userGames = new List<Game>();
-                ViewBag.userGames = CRUD.getUserGames(userName);
+                ViewBag.userGames = CRUD.GetUserGames(userName);
                 return View();
             }
             else
@@ -86,9 +86,20 @@ namespace GameX8_0._4.Controllers
 
         public ActionResult ViewGames()
         {
-            List<Game> games = new List<Game>();
-            games = CRUD.GetAllGames();
-            return View("ViewGames", games);
+            if (Session["userName"] != null && Session["admin"] != null)
+            {
+                List<Game> games = new List<Game>();
+                games = CRUD.GetAllGames();
+                return View("ViewGames", games);
+            }
+            else if(Session["userName"]!=null)
+            {
+                return RedirectToAction("Index", "Home",new {userName=Session["userName"].ToString() });
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
         
         public ActionResult AddUser()
@@ -103,9 +114,8 @@ namespace GameX8_0._4.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "HomeController");
+                return RedirectToAction("Index", "Home");
             }
-            
         }
     }
 }

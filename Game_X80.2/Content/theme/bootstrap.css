@@ -4311,11 +4311,13 @@ input[type="button"].btn-block {
 }
 
 .nav {
+   
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  margin-top:;
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
@@ -4412,6 +4414,7 @@ input[type="button"].btn-block {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  margin-top:-50px;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   -webkit-box-align: center;
@@ -4858,7 +4861,9 @@ input[type="button"].btn-block {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  flex-direction:column;
   display:inline-block;
+  margin-left:20px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -4887,6 +4892,7 @@ input[type="button"].btn-block {
 }
 
 .card-body {
+    
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
@@ -4966,9 +4972,9 @@ input[type="button"].btn-block {
 }
 
 .card-img-top {
-  width: 100%;
-  border-top-left-radius: calc(0.25rem - 1px);
-  border-top-right-radius: calc(0.25rem - 1px);
+    width: 100%;
+    max-width: 400px;
+    height: auto;
 }
 
 .card-img-bottom {
@@ -4981,7 +4987,7 @@ input[type="button"].btn-block {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
@@ -10513,9 +10519,10 @@ a.text-dark:hover, a.text-dark:focus {
   @page {
     size: a3;
   }
-  body {
-    min-width: 992px !important;
-  }
+    body {
+        min-width: 992px !important;
+        color: #edf1f2;
+    }
   .container {
     min-width: 992px !important;
   }
@@ -10693,3 +10700,85 @@ a.text-dark:hover, a.text-dark:focus {
 .close:hover {
   color: #b9a78a;
 }
+.mdl-grid {
+    max-width: 600px;
+}
+
+.mdl-card__media {
+    margin: 0;
+}
+
+    .mdl-card__media > img {
+        max-width: 100%;
+    }
+
+.mdl-card__actions {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+    .mdl-card__actions > .mdl-button--icon {
+        margin-right: 3px;
+        margin-left: 3px;
+    }
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+fieldset, label {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 20px;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin: 10px;
+}
+
+/****** Style Star Rating Widget *****/
+
+.rating {
+    border: none;
+    float: left;
+}
+
+    .rating > input {
+        display: none;
+    }
+
+    .rating > label:before {
+        margin: 5px;
+        font-size: 1.25em;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f005";
+    }
+
+    .rating > .half:before {
+        content: "\f089";
+        position: absolute;
+    }
+
+    .rating > label {
+        color: #ddd;
+        float: right;
+    }
+
+    /***** CSS Magic to Highlight Stars on Hover *****/
+
+    .rating > input:checked ~ label, /* show gold star when clicked */
+    .rating:not(:checked) > label:hover, /* hover current star */
+    .rating:not(:checked) > label:hover ~ label {
+        color: #FFD700;
+    }
+        /* hover previous stars in list */
+
+        .rating > input:checked + label:hover, /* hover current star when changing rating */
+        .rating > input:checked ~ label:hover,
+        .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+        .rating > input:checked ~ label:hover ~ label {
+            color: #FFED85;
+        } 

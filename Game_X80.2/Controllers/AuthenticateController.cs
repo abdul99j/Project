@@ -23,7 +23,7 @@ namespace GameX8_0._4.Controllers
 
                 Session["userName"] = userName;
                 Session["admin"] = userName;
-                return RedirectToAction("Dashboard","Admin", new { userName });
+                return RedirectToAction("Dashboard","Admin", new { userName=Session["userName"].ToString() });
             }
             if(result==0&&user.userStatus=="user")
             {
@@ -35,7 +35,14 @@ namespace GameX8_0._4.Controllers
 
         public ActionResult Signup()
         {
-            return View();
+            if (Session["userName"] == null)
+            {
+                return View();
+            }
+            else
+            {
+                return View("Index", new { userName=Session["userName"].ToString() });
+            }
         }
 
         public ActionResult SignupProc(string userName, string email, string password, string firstName,

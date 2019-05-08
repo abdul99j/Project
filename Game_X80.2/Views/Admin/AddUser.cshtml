@@ -2,77 +2,62 @@
 @{
     ViewBag.Title = "Signup";
 }
+<head>
+    <script src="~/Scripts/validate.js"></script>
+</head>
 
-
-<form action="../../Home/si">
+<form action="../../Authenticate/SignupProc" method="post">
     <fieldset>
-        <legend>SIGN UP</legend>
+        <legend>Add User</legend>
 
         <div class="form-group">
             <label for="userName">User Name</label>
-            <input type="text" class="form-control" id="userName" aria-describedby="iserName" placeholder="Enter userName">
+            <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter userName">
 
         </div>
 
         <div class="form-group">
             <label for="email">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
 
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
         </div>
 
         <div class="form-group">
             <label for="firstName">First Name</label>
-            <input type="text" class="form-control" id="firstName" aria-describedby="firstName" placeholder="Enter First Name">
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name">
         </div>
 
         <div class="form-group">
             <label for="lastName">Last Name</label>
-            <input type="email" class="form-control" id="lastName" aria-describedby="lastName" placeholder="Enter Last Name">
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name">
 
         </div>
 
         <div class="form-group">
             <label for="gender">Gender</label><br />
-            <input type="radio" name="gender" checked>Male<br />
-            <input type="radio" name="gender">Female
+            <input type="radio" name="gender" value="M" checked>Male<br />
+            <input type="radio" name="gender" value="F">Female
         </div>
 
         <div>
-            <select name="status">
+            <label for="userStatus">User Status</label>
+            <select name="status" class="form-control">
                 <option>Admin</option>
                 <option>User</option>
             </select>
         </div>
+        <br />
+        <br />
 
         <div class="form-group">
-            <label for="day">Day</label>&nbsp;&nbsp;
-            <label for="month">Month</label>&nbsp;&nbsp;
-            <label for="year">Year</label><br />
-            <select name="Day">
-               @for (int i = 1; i < 33; i++)
-                {
-                    <option>@i</option>
-                }
-            </select>
-            
-            <select name="Month">
-                @for (int i = 1; i < 14; i++)
-                {
-                    <option>@i</option>
-                }
-            </select>
+            <label for="dateOfBirth">Date Of Birth</label>
+            <input type="date" name="dateOfBirth" id="date"/>
 
-            <select name="year">
-                @for (int i = 1900; i < 2020; i++)
-                {
-                    <option>@i</option>
-                }
-            </select>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </fieldset>

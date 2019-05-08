@@ -23,8 +23,9 @@ namespace GameX8_0._4
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/theme/bootstrap.min.css",
-                      "~/Content/site.css"));
+                      "~/Content/theme/bootstrap.css",
+                      "~/Content/Site.css"));
+           
         }
     }
 }
