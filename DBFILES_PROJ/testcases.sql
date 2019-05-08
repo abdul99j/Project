@@ -1,6 +1,6 @@
 INSERT INTO users values ('MAIRAJ MUHAMMAD','MAIRAJ','MUHAMMAD','loki','user','b.madrid84@yahoo.com','1997-11-26','M')
 INSERT INTO users values ('ABDUL SAMAD','ADBUL','SAMAD','asd','user','b.madrid84@yahoo.com','1997-11-26','M')
-INSERT INTO users values ('SHEHRI DON','SHEHRI','DON','ads','user','b.madrid84@yahoo.com','1991-12-26','M')
+INSERT INTO users values ('SHEHRI ','SHEHRI','abc','ads','user','b.madrid84@yahoo.com','1991-12-26','M')
 
 alter table review alter column reviewDescription nvarchar(500)
 alter table review add dateGiven date

@@ -22,8 +22,17 @@ create table users(
 	 dateOfBirth date,
 	 gender char,
 	 check(userStatus='admin'OR userStatus='user'),
-	 check(gender='M' OR gender='F')
+	 check(gender='Male' OR gender='Female')
 );
+alter table users DROP constraint CK__users__gender__5EBF139D
+alter table users alter column gender char
+alter table users ADD CONSTRAINT CEHCK_GENDER CHECK(gender='M' OR gender='F')
+
+create procedure 
+
+exec dbo.ins
+
+select *from users
 
 create table reviewGiven(
 	reviewID int NOT NULL,
@@ -38,14 +47,15 @@ create table review(
 	reviewDescription int,
 	dateGive date, 
 	check(rating BETWEEN 1 AND 5)
-)
+);
 
 
 create table UserGames(
     gameID int NOT NULL,
 	userName nvarchar(30) NOT NULL,
-	orderDate date,
+	orderDate datetime,
 );
+
 
 
 
@@ -68,37 +78,33 @@ alter table UserGames add constraint PK_USERSGAMES primary key (gameID,userName)
 alter table Media add constraint PK_MEDIA primary key (MediaID,gameID)
 alter table review add constraint PK_REVIEW primary key (reviewID)
 alter table reviewGiven add constraint PK_REVIEW_GIVEN primary key(reviewID,userName,gameID)
---alter table MediaFor add constraint PK_MEDIA_FOR primary key(mediaID,gameID)
+.--alter table MediaFor add constraint PK_MEDIA_FOR primary key(mediaID,gameID)
 --FORIEGN KEYS FOR ALL TABLES
 
 ALTER TABLE reviewGiven
 ADD CONSTRAINT FK_REVIEWS
-FOREIGN KEY(reviewID) REFERENCES review(reviewID)
+FOREIGN KEY(reviewID) REFERENCES review(reviewID) ON UPDATE CASCADE ON DELETE CASCADE
+
 
 ALTER TABLE reviewGiven
 ADD CONSTRAINT FK_REVIEWS_ONE
-FOREIGN KEY (gameID) REFERENCES games(gameID);
+FOREIGN KEY (gameID) REFERENCES games(gameID) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE reviewGiven
 ADD CONSTRAINT FK_REVIEWS_TWO
-FOREIGN KEY (userName) REFERENCES users(userName);
+FOREIGN KEY (userName) REFERENCES users(userName) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 ALTER TABLE UserGames
 ADD CONSTRAINT FK_USER_GAMES
-FOREIGN KEY (gameID) REFERENCES games(gameID);
+FOREIGN KEY (gameID) REFERENCES games(gameID) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE UserGames
 ADD CONSTRAINT FK_UG_ONE
-FOREIGN KEY (userName) REFERENCES users(userName);
+FOREIGN KEY (userName) REFERENCES users(userName) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
-ALTER TABLE MediaFor
-ADD CONSTRAINT FK_MEDIA_FOR
-FOREIGN KEY (gameID) REFERENCES games(gameID);
-
-ALTER TABLE MediaFor
-ADD CONSTRAINT FK_MEDIA_FOR_ONE
-FOREIGN KEY (mediaID) REFERENCES Media(mediaID);
-
+ALTER TABLE Media
+ADD CONSTRAINT FK_MEDIA
+FOREIGN KEY (gameID) REFERENCES games(gameID) ON UPDATE CASCADE ON DELETE CASCADE;
 -- END OF FOREIGN_KEYS 

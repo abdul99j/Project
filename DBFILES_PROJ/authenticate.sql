@@ -2,6 +2,7 @@
 --OUTPUT FLAGS SUCCESS=0
 --NULL VALUES FAILURE=1
 --KEY VIOLATION FAILURE=2
+use gameX8
 GO
 
 CREATE PROCEDURE SIGN_UP
@@ -21,6 +22,7 @@ BEGIN
 	
 	BEGIN
 	
+
 	insert into users values(@UserName,@fname,@lname,@UserPassword,
 	@UserStatus,@UserEmail,@DateOfBirth,@Gender)
 	SET @out_flag=0
@@ -41,12 +43,12 @@ BEGIN
 END
 GO
 
+
+
 --TEST
 DECLARE @return_value int 
-EXEC SIGN_UP @UserName='abdul99j',@fname='Abdul',@lname='samad',@UserEmail='abdul.dps@gmail.com',
-			 @UserPassword='090078601',@UserStatus='user',@DateOfBirth='17-JUL-1999',
-			 @Gender='M',@out_flag=@return_value output
-			 SELECT @return_value AS STATUS
+EXEC SIGN_UP 'raptoMod','raptor','mod','090078601','admin','raptor@gmail.com','17-JUL-1990','M',@return_value
+SELECT @return_value
 GO
 
 ALTER PROCEDURE LOG_IN
@@ -73,5 +75,7 @@ GO
 
 declare
 @return_value int
-EXEC LOG_IN 'abdul99j','090071',@return_value output 
+EXEC LOG_IN 'abdul99j','090078601',@return_value output 
 SELECT @return_value
+
+

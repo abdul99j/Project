@@ -11,6 +11,11 @@ BEGIN
 	SET @returnValue=0
 END
 GO
+
+declare @returnValue int
+exec SHOW_BY_GAMES @returnValue output 
+GO
+
 --VALIDATE DELETE FOR GAMES
 CREATE PROCEDURE DELTE_VALID_GAME
 @gameID int,
@@ -27,6 +32,10 @@ BEGIN
 		SET @returnValue=1
 	END
 END
+GO
+
+declare @returnValue int 
+EXEC DELTE_VALID_GAME 2,@returnValue output
 GO
 
 --VALIDATE DELETE USER GAMES
@@ -48,11 +57,17 @@ BEGIN
 END
 GO
 
+declare @returnValue int
+EXEC DELTE_VALID_USERGAMES 'ABDUL SAMAD',2,@returnValue output
+GO
 CREATE PROCEDURE SHOW_GAMES
 AS
 BEGIN
 	SELECT* FROM games
 END
+GO
+
+EXEC SHOW_GAMES
 GO
 
 CREATE VIEW ALL_GAMES
@@ -85,6 +100,9 @@ Begin
 End
 go
 
+declare @returnValue int 
+EXEC ShowUserGames 'abdul samad'@returnValue output
+go
 
 
 
@@ -264,3 +282,4 @@ DECLARE @testDate date
 END
 GO
 
+DISABLE TRIGGER VALID_RELEASE_DATE ON Games
